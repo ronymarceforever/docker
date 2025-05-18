@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Container Info</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .info { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Container Metadata</h1>
+    <div id="container-info" class="info">Loading...</div>
+    <div id="error" class="error"></div>
+
+    <script>
+        async function fetchContainerInfo() {
+            try {
+                const response = await fetch('http://backend:5000/info');
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                document.getElementById('container-info').innerHTML = `
+                    <strong>Hostname:</strong> ${data.container_hostname}<br>
+                    <strong>IP Address:</strong> ${data.container_ip}
+                `;
+            } catch (error) {
+                document.getElementById('error').textContent = 
+                    `Error fetching data: ${error.message}`;
+            }
+        }
+        
+        fetchContainerInfo();
+    </script>
+</body>
+</html>
